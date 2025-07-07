@@ -11,4 +11,8 @@ public class PostRequest {
   @NotBlank
   private String content;
 
+  @NotBlank
+  private Category category;
+
+
 }

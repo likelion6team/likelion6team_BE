@@ -67,7 +67,7 @@ public class PostController {
     }
 
     String token = authHeader.substring(7).trim();   // "Bearer " 제거
-    String userName = jwtProvider.extractSocialId(token);
+    String userName = jwtProvider.extractUsername(token);
 
     PostResponse response = postService.createPost(postRequest, userName);
     return ResponseEntity.ok(BaseResponse.success("게시글 생성 성공", response));
@@ -88,7 +88,7 @@ public class PostController {
     }
 
     String token = authHeader.substring(7).trim();   // "Bearer " 제거
-    String userName = jwtProvider.extractSocialId(token);
+    String userName = jwtProvider.extractUsername(token);
 
     PostResponse response = postService.updatePost(id, postRequest, userName);
     return ResponseEntity.ok(BaseResponse.success("게시글 수정 성공", response));
@@ -107,7 +107,7 @@ public class PostController {
     }
 
     String token = authHeader.substring(7).trim();   // "Bearer " 제거
-    String userName = jwtProvider.extractSocialId(token);
+    String userName = jwtProvider.extractUsername(token);
 
     Boolean response = postService.deletePost(id, userName);
     return ResponseEntity.ok(BaseResponse.success("게시글 삭제 성공", response));

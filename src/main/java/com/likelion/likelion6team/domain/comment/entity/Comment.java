@@ -1,6 +1,9 @@
 package com.likelion.likelion6team.domain.comment.entity;
 
 
+import com.likelion.likelion6team.domain.post.entity.Post;
+import com.likelion.likelion6team.domain.user.entity.User;
+import com.likelion.likelion6team.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
