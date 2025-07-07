@@ -31,7 +31,7 @@ public class PostService {
 
   // 게시글 생성
   @Transactional
-  public PostResponse createPost(PostRequest createPostRequest) {
+  public PostResponse createPost(PostRequest createPostRequest, String username) {
     log.info("[서비스] 게시글 생성 시도: title= {}, content= {}", createPostRequest.getTitle(), createPostRequest.getContent());
 
     if(createPostRequest.getTitle() == null || createPostRequest.getTitle().isBlank()) {
@@ -74,7 +74,7 @@ public class PostService {
 
   // 게시글 수정
   @Transactional
-  public PostResponse updatePost(Long id, PostRequest updatePostRequest) {
+  public PostResponse updatePost(Long id, PostRequest updatePostRequest, String username) {
     log.info("[서비스] 게시글 수정 시도: id= {}, newTitle= {}, newContent= {}", id, updatePostRequest.getTitle(), updatePostRequest.getContent());
 
     if(updatePostRequest.getTitle() == null || updatePostRequest.getTitle().isBlank()) {
@@ -105,7 +105,7 @@ public class PostService {
 
   // 게시글 삭제
   @Transactional
-  public boolean deletePost(Long id) {
+  public boolean deletePost(Long id, String username) {
     log.info("[서비스] 게시글 삭제 시도: id= {}", id);
 
 

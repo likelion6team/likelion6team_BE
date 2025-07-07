@@ -1,12 +1,16 @@
 package com.likelion.likelion6team.domain.post.controller;
 
+import com.likelion.likelion6team.domain.auth.exception.AuthErrorCode;
 import com.likelion.likelion6team.domain.post.dto.request.PostRequest;
 import com.likelion.likelion6team.domain.post.dto.response.PostResponse;
 import com.likelion.likelion6team.domain.post.service.PostService;
+import com.likelion.likelion6team.global.exception.CustomException;
+import com.likelion.likelion6team.global.jwt.JwtProvider;
 import com.likelion.likelion6team.global.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +32,7 @@ public class PostController {
 
 
   private final PostService postService;
+  private final JwtProvider jwtProvider;
 
 
   @Operation(summary = "(확인용)게시글 전체 조회",
@@ -53,8 +58,18 @@ public class PostController {
   @PostMapping("/posts")
   public ResponseEntity<BaseResponse<PostResponse>> createPost(
       @Parameter(description = "게시글 작성 내용")
-      @RequestBody @Valid PostRequest postRequest) {
-    PostResponse response = postService.createPost(postRequest);
+      @RequestBody @Valid PostRequest postRequest,
+      HttpServletRequest request) {
+    // 로그인한 아이디 가져오기 //
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      throw new CustomException(AuthErrorCode.INVALID_ACCESS_TOKEN);  // 에러 처리 (원하는 예외로 바꿔도 됨)
+    }
+
+    String token = authHeader.substring(7).trim();   // "Bearer " 제거
+    String userName = jwtProvider.extractSocialId(token);
+
+    PostResponse response = postService.createPost(postRequest, userName);
     return ResponseEntity.ok(BaseResponse.success("게시글 생성 성공", response));
   }
 
@@ -64,16 +79,37 @@ public class PostController {
   @PutMapping("/posts/{id}")
   public ResponseEntity<BaseResponse<PostResponse>> updatePost(
       @Parameter(description = "게시글 수정 내용") @RequestBody PostRequest postRequest,
-      @Parameter(description = "특정 게시글 ID") @PathVariable Long id) {
-    PostResponse response = postService.updatePost(id, postRequest);
+      @Parameter(description = "특정 게시글 ID") @PathVariable Long id,
+      HttpServletRequest request) {
+    // 로그인한 아이디 가져오기 //
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      throw new CustomException(AuthErrorCode.INVALID_ACCESS_TOKEN);  // 에러 처리 (원하는 예외로 바꿔도 됨)
+    }
+
+    String token = authHeader.substring(7).trim();   // "Bearer " 제거
+    String userName = jwtProvider.extractSocialId(token);
+
+    PostResponse response = postService.updatePost(id, postRequest, userName);
     return ResponseEntity.ok(BaseResponse.success("게시글 수정 성공", response));
   }
 
   @Operation(summary = "게시글 삭제",
       description = "게시판 페이지에서 게시글 삭제 버튼을 눌렀을 때 요청되는 API.")
   @DeleteMapping("/posts/{id}")
-  public ResponseEntity<BaseResponse<Boolean>> deletePost(@Parameter(description = "특정 게시글 ID") @PathVariable Long id) {
-    Boolean response = postService.deletePost(id);
+  public ResponseEntity<BaseResponse<Boolean>> deletePost(
+      @Parameter(description = "특정 게시글 ID") @PathVariable Long id,
+      HttpServletRequest request) {
+    // 로그인한 아이디 가져오기 //
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      throw new CustomException(AuthErrorCode.INVALID_ACCESS_TOKEN);  // 에러 처리 (원하는 예외로 바꿔도 됨)
+    }
+
+    String token = authHeader.substring(7).trim();   // "Bearer " 제거
+    String userName = jwtProvider.extractSocialId(token);
+
+    Boolean response = postService.deletePost(id, userName);
     return ResponseEntity.ok(BaseResponse.success("게시글 삭제 성공", response));
   }
   
