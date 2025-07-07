@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.likelion.likelion6team.global.common.BaseTimeEntity;
 
 
 @Entity
