@@ -13,8 +13,8 @@ public class LikePostResponse {
   private Long postId;
 
   @Schema(description = "게시글 이름")
-  private String postName;
+  private String postTitle;
 
   @Schema(description = "게시글 내용")
-  private double introduction;
+  private String content;
 }

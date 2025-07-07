@@ -1,6 +1,6 @@
 package com.likelion.likelion6team.domain.Like.entity;
 
-import com.likelion.likelion6team.domain.Post.entity.post;
+import com.likelion.likelion6team.domain.post.entity.Post;
 import com.likelion.likelion6team.domain.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
