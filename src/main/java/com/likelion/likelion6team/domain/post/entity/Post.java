@@ -39,9 +39,6 @@ public class Post extends BaseTimeEntity {
   @Column(nullable = false)
   private Long view;
 
-  @Column(nullable = false)
-  private String content;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user", nullable = false) // 외래키 컬럼 이름
   private User user;
@@ -49,6 +46,8 @@ public class Post extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category", nullable = false) // 외래키 컬럼 이름
   private Category category;
+
+
 
 
   public void update(String title, String content) {

@@ -46,7 +46,7 @@ public class PostService {
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
 
-    Category category = categoryRepository.findById(updatePostRequest.getCategory().getId())
+    Category category = categoryRepository.findById(createPostRequest.getCategory().getId())
         .orElseThrow(() -> new CustomException(CategoryErrorCode.CATEGORY_NOT_FOUND));
 
 
@@ -97,7 +97,7 @@ public class PostService {
 
 
     Post post = postRepository.findById(id)
-        .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(PostErrorCode.POST_ERROR_FOUND));
 
 
     if (!post.getUser().getUsername().equals(username)) {
@@ -136,7 +136,7 @@ public class PostService {
 
 
     Post post = postRepository.findById(id)
-        .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(PostErrorCode.POST_ERROR_FOUND));
 
 
     if (!post.getUser().getUsername().equals(username)) {

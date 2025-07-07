@@ -1,8 +1,13 @@
 package com.likelion.likelion6team.domain.comment.exception;
 
 import com.likelion.likelion6team.global.exception.model.BaseErrorCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+
+@Getter
+@AllArgsConstructor
 public enum CommentErrorCode implements BaseErrorCode {
   COMMENT_NOT_FOUND("COMMENT_4001", "존재하지 않는 댓글입니다.", HttpStatus.NOT_FOUND),
   COMMENT_ALREADY_EXISTS("COMMENT_4002", "이미 존재하는 댓글입니다.", HttpStatus.BAD_REQUEST),
