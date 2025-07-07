@@ -42,12 +42,8 @@ public class PostService {
     log.info("[서비스] 게시글 생성 시도: title= {}, content= {}", createPostRequest.getTitle(), createPostRequest.getContent());
 
 
-    User user = userRepository.findByUsername(username)
+    User user = userRepository.findByEmail(username)
         .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
-
-
-    Category category = categoryRepository.findById(createPostRequest.getCategory().getId())
-        .orElseThrow(() -> new CustomException(CategoryErrorCode.CATEGORY_NOT_FOUND));
 
 
     if(createPostRequest.getTitle() == null || createPostRequest.getTitle().isBlank()) {
@@ -67,7 +63,6 @@ public class PostService {
         .content(createPostRequest.getContent())
         .view(0L)
         .user(user)
-        .category(category)
         .build();
     postRepository.save(post);
     log.info("[서비스] 게시글 생성 완료: id={}, title= {}, content= {}", post.getId(), post.getTitle(), post.getContent());
@@ -100,7 +95,7 @@ public class PostService {
         .orElseThrow(() -> new CustomException(PostErrorCode.POST_ERROR_FOUND));
 
 
-    if (!post.getUser().getUsername().equals(username)) {
+    if (!post.getUser().getEmail().equals(username)) {
       throw new CustomException(PostErrorCode.NO_PERMISSION_TO_UPDATE);
     }
 
@@ -139,23 +134,29 @@ public class PostService {
         .orElseThrow(() -> new CustomException(PostErrorCode.POST_ERROR_FOUND));
 
 
-    if (!post.getUser().getUsername().equals(username)) {
+    if (!post.getUser().getEmail().equals(username)) {
       throw new CustomException(PostErrorCode.NO_PERMISSION_TO_UPDATE);
     }
 
-
-    Post post = postRepository.findById(id)
-        .orElseThrow(() -> {
-          log.warn("[서비스] 게시글 삭제 실패 - 존재하지 않음: id= {}", id);
-          return new CustomException(PostErrorCode.POST_ERROR_FOUND);
-        });
 
     postRepository.deleteById(id);
     log.info("[서비스] 게시글 삭제 완료: id= {}", id);
     return true;
   }
 
-
+//
+//  // 전체 게시글 최신순 조회
+//  public List<PostResponse> getAllPostsLatest(){
+//
+//    List<Post> postList = (List<Post>) postRepository.findAllByOrderByCreatedAtDesc();
+//    return postList.stream().map(postMapper::toPostResponse).toList();
+//  }
+//
+//  // 전체 게시글 조회 많은 순 조회
+//  public List<PostResponse> getAllPostsPopular(){
+//    List<Post> postList = (List<Post>) postRepository.findAllByOrderByViewDesc();
+//    return postList.stream().map(postMapper::toPostResponse).toList();
+//  }
 
 
 

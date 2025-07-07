@@ -43,10 +43,6 @@ public class Post extends BaseTimeEntity {
   @JoinColumn(name = "user", nullable = false) // 외래키 컬럼 이름
   private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "category", nullable = false) // 외래키 컬럼 이름
-  private Category category;
-
 
 
 

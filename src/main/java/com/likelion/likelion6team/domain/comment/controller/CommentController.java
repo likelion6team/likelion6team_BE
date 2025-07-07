@@ -35,7 +35,7 @@ public class CommentController {
 
 
   // 후기 작성
-  @Operation(summary="후기 작성 API", description ="후기 작성을 위한 API")
+  @Operation(summary="댓글 작성 API", description ="댓글 작성을 위한 API")
   @PostMapping("")
   public ResponseEntity<BaseResponse<CommentResponse>> createReview(
       @RequestBody @Valid CommentRequest reviewRequest,
@@ -51,15 +51,15 @@ public class CommentController {
 
 
     CommentResponse reviewResponse = commentService.createReview(userName, reviewRequest);
-    return ResponseEntity.ok(BaseResponse.success("후기 작성에 성공했습니다.", reviewResponse));
+    return ResponseEntity.ok(BaseResponse.success("댓글 작성에 성공했습니다.", reviewResponse));
   }
 
 
   // 후기 수정
-  @Operation(summary="후기 수정 API", description ="후기 수정을 위한 API")
-  @PatchMapping("/{reviewId}")
+  @Operation(summary="댓글 수정 API", description ="댓글 수정을 위한 API")
+  @PatchMapping("/{commentId}")
   public ResponseEntity<BaseResponse<CommentResponse>> updateReview(
-      @PathVariable Long reviewId,
+      @PathVariable Long commentId,
       @RequestBody @Valid CommentRequest reviewRequest,
       HttpServletRequest request) {
     // 로그인한 아이디 가져오기 //
@@ -72,15 +72,15 @@ public class CommentController {
     String userName = jwtProvider.extractUsername(token);  // 토큰에서 로그인한 아이디 추출
 
 
-    CommentResponse reviewResponse = commentService.updateReview(reviewId, userName, reviewRequest);
+    CommentResponse reviewResponse = commentService.updateReview(commentId, userName, reviewRequest);
     return ResponseEntity.ok(BaseResponse.success("후기 수정에 성공했습니다.", reviewResponse));
   }
 
   // 후기 삭제
-  @Operation(summary="후기 삭제 API", description ="후기 삭제를 위한 API")
-  @DeleteMapping("/{id}")
+  @Operation(summary="댓글 삭제 API", description ="댓글 삭제를 위한 API")
+  @DeleteMapping("/{commentId}")
   public ResponseEntity<BaseResponse<Boolean>> deleteReview(
-      @Parameter(description = "특정 후기 ID") @PathVariable Long id, HttpServletRequest request ) {
+      @Parameter(description = "특정 댓글 ID") @PathVariable Long commentId, HttpServletRequest request ) {
     // 로그인한 아이디 가져오기 //
     String authHeader = request.getHeader("Authorization");
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -90,29 +90,29 @@ public class CommentController {
     String token = authHeader.substring(7).trim();   // "Bearer " 제거
     String userName = jwtProvider.extractUsername(token);  // 토큰에서 로그인한 아이디 추출
 
-    Boolean response = commentService.deleteReview(userName, id);
-    return ResponseEntity.ok(BaseResponse.success("후기 삭제에 성공했습니다.", response));
+    Boolean response = commentService.deleteReview(userName, commentId);
+    return ResponseEntity.ok(BaseResponse.success("댓글 삭제에 성공했습니다.", response));
   }
 
 
 
 
   // 상세 음식 페이지 -> 음식별 후기 리스트 조회
-  @Operation(summary = "음식별 후기 리스트 조회",
-      description = "음식별 후기 리스트 조회하는 API.")
-  @GetMapping("/food/{foodId}")
+  @Operation(summary = "게시글별 댓글 리스트 조회",
+      description = "게시글별 댓글 리스트 조회하는 API.")
+  @GetMapping("/post/{postId}")
   public ResponseEntity<BaseResponse<List<CommentResponse>>> getAllReviewsByFoodId(
-      @Parameter(description = "특정 음식 ID", example = "1")
-      @PathVariable Long foodId ) {
-    List<CommentResponse> response = commentService.getAllReviewsByFoodId(foodId);
-    return ResponseEntity.ok(BaseResponse.success("음식별 후기 리스트 조회 성공", response));
+      @Parameter(description = "특정 게시글 ID", example = "1")
+      @PathVariable Long postId ) {
+    List<CommentResponse> response = commentService.getAllReviewsByFoodId(postId);
+    return ResponseEntity.ok(BaseResponse.success("게시글별 댓글 리스트 조회 성공", response));
   }
 
 
 
   // 마이페이지 -> 회원별 후기 리스트 조회
-  @Operation(summary = "회원별 후기 리스트 조회",
-      description = "회원별 후기 리스트 조회하는 API.")
+  @Operation(summary = "회원별 댓글 리스트 조회",
+      description = "회원별 댓글 리스트 조회하는 API.")
   @GetMapping("/me")
   public ResponseEntity<BaseResponse<List<CommentResponse>>> getMyReviews(
       HttpServletRequest request) {
@@ -127,29 +127,29 @@ public class CommentController {
 
 
     List<CommentResponse> response = commentService.getAllReviewsByUserName(userName);
-    return ResponseEntity.ok(BaseResponse.success("회원별 후기 리스트 조회 성공", response));
+    return ResponseEntity.ok(BaseResponse.success("회원별 댓글 리스트 조회 성공", response));
   }
 
 
   // (확인용) 단일 후기 조회
-  @Operation(summary = "후기 단일 조회",
-      description = "단일 후기 정보를 조회하는 API.")
-  @GetMapping("/review/{reviewId}")
+  @Operation(summary = "댓글 단일 조회",
+      description = "단일 댓글 정보를 조회하는 API.")
+  @GetMapping("/review/{commentId}")
   public ResponseEntity<BaseResponse<CommentResponse>> getReviewById(
-      @Parameter(description = "후기 고유 ID", example = "1")
-      @PathVariable Long reviewId) {
-    CommentResponse response = commentService.getReview(reviewId);
-    return ResponseEntity.ok(BaseResponse.success("단일 후기 조회 성공", response));
+      @Parameter(description = "댓글 고유 ID", example = "1")
+      @PathVariable Long commentId) {
+    CommentResponse response = commentService.getReview(commentId);
+    return ResponseEntity.ok(BaseResponse.success("단일 댓글 조회 성공", response));
   }
 
 
   // (확인용) 전체 후기 리스트 조회
-  @Operation(summary = "후기 전체 조회",
-      description = "전체 후기 정보 리스트를 조회하는 API.")
+  @Operation(summary = "댓글 전체 조회",
+      description = "전체 댓글 정보 리스트를 조회하는 API.")
   @GetMapping("")
   public ResponseEntity<BaseResponse<List<CommentResponse>>> getAllReviews() {
     List<CommentResponse> response = commentService.getAllReviews();
-    return ResponseEntity.ok(BaseResponse.success("전체 후기 조회 성공", response));
+    return ResponseEntity.ok(BaseResponse.success("전체 댓글 조회 성공", response));
   }
 
 

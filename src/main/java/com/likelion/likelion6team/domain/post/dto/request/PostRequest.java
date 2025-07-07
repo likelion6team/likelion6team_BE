@@ -10,9 +10,9 @@ public class PostRequest {
   private String title;
   @NotBlank
   private String content;
-
-  @NotBlank
-  private Category category;
-
+//
+//  @NotBlank
+//  private Category category;
+//
 
 }
